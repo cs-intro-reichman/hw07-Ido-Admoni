@@ -53,17 +53,19 @@ public class SpellChecker {
 		int minDistance = threshold;
 		for (int i = 0; i < dictionary.length; i++){
 			String dicWord = dictionary[i];
-			int distance = levenshtein(word, dicWord);
+			int distance = levenshtein(word, dicWord); 
 			if (distance < minDistance){
 				minDistance = distance;
 				closestWord = dicWord;
 			}
 		}
-			if (minDistance <= threshold && minDistance != 0) {
+			if (minDistance <= threshold) {
 				return closestWord;
-			} else {
+			} else if (minDistance == 0) {
 				return word;
-			}
+			} else {
+				return closestWord;
+		}
 		}
 
 	public static int myMin(int a, int b) { // a helper funcion, returns the minimum int
