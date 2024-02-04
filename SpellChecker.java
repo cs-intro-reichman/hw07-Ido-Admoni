@@ -29,9 +29,9 @@ public class SpellChecker {
 	char char1 = word1.charAt(0);
 	char char2 = word2.charAt(0);
 	if (char1 == char2){
-		return levenshtein(word1.substring(1), word2.substring(1));
+		return levenshtein(tail(word1), tail(word2));
 	}
-	// If both two chars are not equal -> calculates acorrding to the given opertions 
+	// If both two chars are not equal -> calculates acorrding to the given operations 
 	int insert = levenshtein(word1, tail(word2));
 	int delete = levenshtein(tail(word1), word2);
 	int substitute = levenshtein(tail(word1), tail(word2));
@@ -50,7 +50,7 @@ public class SpellChecker {
 
 	public static String spellChecker(String word, int threshold, String[] dictionary) {
 		String closestWord = word;
-		int minDistance = threshold;
+		int minDistance = (threshold +1); // ensures that the first comparison in the loop will always be true
 		for (int i = 0; i < dictionary.length; i++){
 			String dicWord = dictionary[i];
 			int distance = levenshtein(word, dicWord); 
@@ -59,13 +59,7 @@ public class SpellChecker {
 				closestWord = dicWord;
 			}
 		}
-			if (minDistance <= threshold) {
-				return closestWord;
-			} else if (minDistance == 0) {
-				return word;
-			} else {
-				return closestWord;
-		}
+		return closestWord;
 		}
 
 	public static int myMin(int a, int b) { // a helper funcion, returns the minimum int
