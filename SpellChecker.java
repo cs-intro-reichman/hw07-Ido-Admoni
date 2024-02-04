@@ -11,25 +11,62 @@ public class SpellChecker {
 	}
 
 	public static String tail(String str) {
-		// Your code goes here
+		return str.substring(1);
 	}
 
 	public static int levenshtein(String word1, String word2) {
-		// Your code goes here
+	// Convert the words to lower case	
+	word1 = word1.toLowerCase();
+	word2 = word2.toLowerCase();
+    // Base case: If either of the words is empty, return the length of the other word
+	if (word1.isEmpty()) {
+		return word2.length();
 	}
+	if (word2.isEmpty()) {
+		return word1.length();
+	}
+	// checks the first character of the two words
+	char char1 = word1.charAt(0);
+	char char2 = word2.charAt(0);
+	if (char1 == char2){
+		return levenshtein(tail(word1), tail(word2));
+	}
+	// If both two chars are not equal -> calculates acorrding to the given operations 
+	int insert = levenshtein(word1, tail(word2));
+	int delete = levenshtein(tail(word1), word2);
+	int substitute = levenshtein(tail(word1), tail(word2));
+	return (1 + myMin(myMin(insert, substitute), delete)); // calculate the min and adds 1
+}
 
 	public static String[] readDictionary(String fileName) {
 		String[] dictionary = new String[3000];
-
 		In in = new In(fileName);
-
-		// Your code here
-
+		for (int i = 0; i < 3000 ; i++){
+			String word = in.readString();
+			dictionary[i] = word; 
+		}
 		return dictionary;
 	}
 
 	public static String spellChecker(String word, int threshold, String[] dictionary) {
-		// Your code goes here
-	}
+		String closestWord = word;
+		int minDistance = (threshold +1); // ensures that the first comparison in the loop will always be true
+		for (int i = 0; i < dictionary.length; i++){
+			String dicWord = dictionary[i];
+			int distance = levenshtein(word, dicWord); 
+			if (distance < minDistance){
+				minDistance = distance;
+				closestWord = dicWord;
+			}
+		}
+		return closestWord;
+		}
 
+	public static int myMin(int a, int b) { // a helper funcion, returns the minimum int
+		if (a < b) {
+			return a;
+		} else {
+			return b;
+		}
+	}
 }
